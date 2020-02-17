@@ -13,8 +13,7 @@ class Stack implements IStack<any> {
     }
 
     add(item: any): void {
-        this.stack.unshift(item);
-        console.log(this.stack);
+        this.stack.push(item);
     }
 
     get(): any[] {
@@ -22,7 +21,7 @@ class Stack implements IStack<any> {
             return null;
         }
 
-        return this.stack[0];
+        return this.stack.pop();
     }
 }
 
@@ -38,6 +37,6 @@ class Queue implements IQueue<any> {
         if (this.queue.length <= 0) {
             return null;
         }
-        return this.queue[0];
+        return this.queue.shift();
     }
 }
