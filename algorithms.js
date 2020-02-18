@@ -72,7 +72,7 @@ const isBracketsPlacedCorrectly = (str) => {
             }
         }
     }
-    return true;
+    return str.length === 0;
 };
 
 /**
