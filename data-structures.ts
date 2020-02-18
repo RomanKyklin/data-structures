@@ -54,7 +54,7 @@ class Queue implements IQueue<any> {
 }
 
 class ListNode implements INode<any> {
-    constructor(private value: any, public next: ListNode = null) {
+    constructor(public value: any, public next: ListNode = null) {
     }
 }
 
