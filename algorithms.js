@@ -47,7 +47,7 @@ const isStrPalindrome = str => {
         let symmetricalIndex = str.length - 1 - i;
         if (str[currentIndex] !== str[symmetricalIndex]) {
             return false;
-        } else if (symmetricalIndex === currentIndex) {
+        } else if (symmetricalIndex <= currentIndex) {
             return true;
         }
     }
@@ -89,3 +89,4 @@ const isMatrixPalindrome = matrixArr => {
     }
     return true;
 };
+
