@@ -90,3 +90,82 @@ const isMatrixPalindrome = matrixArr => {
     return true;
 };
 
+const quickSort = (items) => {
+    const pivot = items[0];
+    const lessPivotElements = [];
+    const greaterPivotElements = [];
+
+    if (items.length < 2) {
+        return items;
+    }
+
+    items.forEach((val, index) => {
+        if (val < pivot || val === pivot && index !== 0) {
+            lessPivotElements.push(val);
+        } else if (val > pivot) {
+            greaterPivotElements.push(val);
+        }
+    });
+
+    return [...quickSort(lessPivotElements), pivot, ...quickSort(greaterPivotElements)]
+};
+
+const merge = (arrFirst, arrSecond) => {
+    let i = 0;
+    let j = 0;
+    let result = [];
+
+    while (i < arrFirst.length && j < arrSecond.length) {
+        if (arrFirst[i] < arrSecond[j]) {
+            result.push(arrFirst[i]);
+            i++;
+        } else {
+            result.push(arrSecond[j]);
+            j++;
+        }
+    }
+
+
+    return [
+        ...result,
+        ...arrFirst.slice(i),
+        ...arrSecond.slice(j)
+    ];
+};
+
+const mergeSort = arr => {
+    if (arr.length < 2) {
+        return arr;
+    }
+    const middleIndex = Math.floor(arr.length / 2);
+    const leftArr = arr.slice(0, middleIndex);
+    const rightArr = arr.slice(middleIndex, arr.length);
+
+
+    return merge(mergeSort(leftArr), mergeSort(rightArr));
+};
+
+const bubbleSort = arr => {
+    let result = [...arr];
+    for(let i = 0; i < result.length; i++) {
+        for(let j = 0; j < result.length; j++) {
+            let temp = result[j];
+            let current = result[j];
+            let next = result[j + 1];
+            if(next !== undefined && current > next) {
+                result[j] = next;
+                result[j + 1] = temp;
+            }
+        }
+    }
+    return result;
+};
+
+const heapSort = arr => {
+
+};
+
+module.exports = {quickSort, mergeSort, bubbleSort, heapSort, merge};
+
+
+console.log(mergeSort([13, 3, 1, 67, 34, 43]));

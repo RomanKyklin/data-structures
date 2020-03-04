@@ -100,7 +100,7 @@ class LinkedList implements ILinkedList<any> {
         const removeElem = this.get(index);
         if (index === 1) {
             this.head = removeElem.next;
-            return
+            return;
         }
 
         const previousElem = this.get(index - 1);
@@ -125,7 +125,7 @@ class LinkedList implements ILinkedList<any> {
 
     reverse(): ILinkedList<any> {
         if (this.head === null) {
-            return null
+            return null;
         }
         let current: ListNode = this.head;
         let prev = null;
@@ -139,3 +139,163 @@ class LinkedList implements ILinkedList<any> {
         return prev;
     }
 }
+
+
+class QElement {
+    constructor(public element, public priority) {
+    }
+}
+
+class PriorityQueue {
+    constructor(private items: QElement[] = []) {
+    }
+
+    enqueue(element, priority): void {
+        let qElement = new QElement(element, priority);
+        let contain = false;
+        for (let i = 0; i < this.items.length; i++) {
+            if (this.items[i].priority > qElement.priority) {
+                this.items.splice(i, 0, qElement);
+                contain = true;
+                break;
+            }
+        }
+
+        if (!contain) {
+            this.items.push(qElement);
+        }
+    }
+
+    dequeue() {
+        if (!this.isEmpty()) {
+            return this.items.shift();
+        }
+
+        return null;
+    }
+
+    front() {
+        if (!this.isEmpty()) {
+            return this.items[0];
+        }
+
+        return null;
+    }
+
+    rear() {
+        if (!this.isEmpty()) {
+            return this.items[this.items.length - 1];
+        }
+
+        return null;
+    }
+
+    isEmpty(): boolean {
+        return this.items.length === 0;
+    }
+
+    printPQueue() {
+        let result = [];
+        this.items.forEach(val => result.push(`${val.element}`));
+        return result.join(' ');
+    }
+}
+
+
+class TreeNode {
+    public left: TreeNode;
+    public right: TreeNode;
+    public value: number;
+
+    constructor(value) {
+        this.value = value;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+class BinaryTree {
+    public root: TreeNode;
+    public count: number;
+
+    constructor(value) {
+        this.root = new TreeNode(value);
+        this.count = 0;
+    }
+
+    size(): number {
+        return this.count;
+    }
+
+    insert(value): void {
+        this.count++;
+
+        let newNode = new TreeNode(value);
+
+        const searchTree = (node: TreeNode) => {
+            if (value < node.value) {
+                if (!node.left) {
+                    node.left = newNode;
+                } else {
+                    searchTree(node.left);
+                }
+            } else if (value > node.value) {
+                if (!node.right) {
+                    node.right = newNode
+                } else {
+                    searchTree(node.right);
+                }
+            }
+        };
+
+        searchTree(this.root);
+    }
+
+    min(): number {
+        let currentNode = this.root;
+
+        while (currentNode.left) {
+            currentNode = currentNode.left;
+        }
+
+        return currentNode.value;
+    }
+
+    max(): number {
+        let currentNode = this.root;
+
+        while (currentNode.right) {
+            currentNode = currentNode.right;
+        }
+
+        return currentNode.value;
+    }
+
+    search(value): number | null {
+        let currentNode = this.root;
+
+        while (currentNode) {
+            if (value === currentNode.value) {
+                return value;
+            }
+            if (value < currentNode.value) {
+                currentNode = currentNode.left
+            } else {
+                currentNode = currentNode.right;
+            }
+        }
+
+        return null;
+    }
+}
+
+const bts = new BinaryTree(5);
+
+bts.insert(2);
+bts.insert(10);
+bts.insert(3);
+console.log(bts.max());
+console.log(bts.min());
+console.log(bts.size());
+console.log(bts.search(5));
+console.log(bts.search(55));
