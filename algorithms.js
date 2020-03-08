@@ -66,7 +66,6 @@ const isBracketsPlacedCorrectly = (str) => {
         if (closedSymbols.includes(str[i])) {
             let lastStackElement = stack.pop();
             let pair = `${lastStackElement}${str[i]}`;
-            console.log(pair);
             if (!pairs.includes(pair)) {
                 return false;
             }
@@ -147,12 +146,12 @@ const mergeSort = arr => {
 
 const bubbleSort = arr => {
     let result = [...arr];
-    for(let i = 0; i < result.length; i++) {
-        for(let j = 0; j < result.length; j++) {
+    for (let i = 0; i < result.length; i++) {
+        for (let j = 0; j < result.length; j++) {
             let temp = result[j];
             let current = result[j];
             let next = result[j + 1];
-            if(next !== undefined && current > next) {
+            if (next !== undefined && current > next) {
                 result[j] = next;
                 result[j + 1] = temp;
             }
@@ -161,11 +160,72 @@ const bubbleSort = arr => {
     return result;
 };
 
-const heapSort = arr => {
+const selectionSort = unsortedArray => {
+    let result = [...unsortedArray];
+    for (let i = 0; i < result.length; i++) {
+        let min = i;
+        for (let j = i; j < result.length; j++) {
+            if (result[j] < result[min]) {
+                min = j;
+            }
+        }
 
+        if (min !== i) {
+            swap(result, i, min);
+        }
+    }
+
+
+    return result;
 };
 
-module.exports = {quickSort, mergeSort, bubbleSort, heapSort, merge};
+const swap = (arr, start, end) => {
+    let temp = arr[start];
+    arr[start] = arr[end];
+    arr[end] = temp;
+};
+
+const heapSort = array => {
+    let length = array.length;
+    let i = Math.floor(length / 2 - 1);
+    let k = length - 1;
+
+    while (i >= 0) {
+        heapify(array, length, i);
+        i--;
+    }
+
+    while (k >= 0) {
+        [array[0], array[k]] = [array[k], array[0]];
+        heapify(array, k, 0);
+        k--;
+    }
+
+    return array;
+};
+
+const heapify = (arr, length, i) => {
+    let largest = i;
+    let left = i * 2 + 1;
+    let right = left + 1;
+
+    if (left < length && arr[left] > arr[largest]) {
+        largest = left;
+    }
+
+    if (right < length && arr[right] > arr[largest]) {
+        largest = right;
+    }
+
+    if (largest !== i) {
+        [arr[i], arr[largest]] = [arr[largest], arr[i]];
+
+        heapify(arr, length, largest);
+    }
+
+    return arr;
+};
 
 
-console.log(mergeSort([13, 3, 1, 67, 34, 43]));
+module.exports = {quickSort, mergeSort, bubbleSort, heapSort, merge, selectionSort};
+

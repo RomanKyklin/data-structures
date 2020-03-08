@@ -271,12 +271,12 @@ class BinaryTree {
         return currentNode.value;
     }
 
-    search(value): number | null {
+    search(value): TreeNode | null {
         let currentNode = this.root;
 
         while (currentNode) {
             if (value === currentNode.value) {
-                return value;
+                return currentNode;
             }
             if (value < currentNode.value) {
                 currentNode = currentNode.left
@@ -287,15 +287,71 @@ class BinaryTree {
 
         return null;
     }
+
+    bfs() {
+        let result = [];
+        let queue = [];
+
+        queue.push(this.root);
+        while (queue.length) {
+            let currentNode: TreeNode = queue.shift();
+            result.push(currentNode);
+
+            if (currentNode.left) {
+                queue.push(currentNode.left);
+            }
+
+            if (currentNode.right) {
+                queue.push(currentNode.right);
+            }
+        }
+        return result;
+    }
+
+    dfsPreOrder() {
+        let result = [];
+        const traverse = (node: TreeNode) => {
+            result.push(node);
+            if (node.left) {
+                traverse(node.left);
+            }
+            if (node.right) {
+                traverse(node.right);
+            }
+        };
+        traverse(this.root);
+        return result;
+    }
+
+    dfsInOrder() {
+        let result = [];
+        const traverse = (node: TreeNode) => {
+            if (node.left) {
+                traverse(node.left);
+            }
+            result.push(node);
+            if (node.right) {
+                traverse(node.right);
+            }
+        };
+        traverse(this.root);
+        return result;
+    }
+
+    dfsPostOrder() {
+        let result = [];
+        const traverse = (node: TreeNode) => {
+            if (node.left) {
+                traverse(node.left);
+            }
+            if (node.right) {
+                traverse(node.right);
+            }
+            result.push(node);
+        };
+        traverse(this.root);
+        return result;
+    }
 }
 
-const bts = new BinaryTree(5);
-
-bts.insert(2);
-bts.insert(10);
-bts.insert(3);
-console.log(bts.max());
-console.log(bts.min());
-console.log(bts.size());
-console.log(bts.search(5));
-console.log(bts.search(55));
+export {BinaryTree};
