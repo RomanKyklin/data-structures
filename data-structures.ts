@@ -354,4 +354,121 @@ class BinaryTree {
     }
 }
 
-export {BinaryTree};
+class Graph {
+    private readonly adjacencyList;
+
+    constructor() {
+        this.adjacencyList = {}
+    }
+
+    public addVertex(vertex: any): void {
+        if (!this.adjacencyList[vertex]) {
+            this.adjacencyList[vertex] = [];
+        }
+    }
+
+    public getAdjList() {
+        return this.adjacencyList;
+    }
+
+    public addEdge(firstVertex: any, secondVertex: any) {
+        if (this.isVertexExists(firstVertex) && this.isVertexExists(secondVertex)
+            && !this.isEdgeExists(firstVertex, secondVertex)) {
+            this.adjacencyList[firstVertex].push(secondVertex);
+            this.adjacencyList[secondVertex].push(firstVertex);
+        }
+    }
+
+    public removeEdge(firstVertex: any, secondVertex: any) {
+        if (this.isVertexExists(firstVertex) && this.isVertexExists(secondVertex)
+            && this.isEdgeExists(firstVertex, secondVertex)) {
+            this.adjacencyList[firstVertex] = this.adjacencyList[firstVertex].filter(val => val !== secondVertex);
+            this.adjacencyList[secondVertex] = this.adjacencyList[secondVertex].filter(val => val !== firstVertex);
+        }
+    }
+
+    public removeVertex(vertex: any) {
+        if (this.isVertexExists(vertex)) {
+            Object.keys(this.adjacencyList).map((value, index) => {
+                if (value !== vertex && this.isEdgeExists(vertex, value)) {
+                    this.removeEdge(vertex, value);
+                }
+            });
+            delete this.adjacencyList[vertex];
+        }
+    }
+
+    public DFS(startVertex: any) {
+        const result = [];
+        const visited = {};
+        const dfs = (vertex: any) => {
+            if (!this.isVertexExists(vertex)) return null;
+            visited[vertex] = true;
+            result.push(vertex);
+            this.adjacencyList[vertex].forEach(neighbor => {
+                if (!visited[neighbor]) {
+                    return dfs(neighbor);
+                }
+            })
+        };
+        dfs(startVertex);
+
+        return result;
+    }
+
+    public DFSIterative(startVertex: any) {
+        const stack = [startVertex];
+        const result = [];
+        const visited = {};
+        let currentVertex;
+
+        if (this.isVertexExists(startVertex)) {
+            visited[startVertex] = true;
+
+            while (stack.length) {
+                currentVertex = stack.pop();
+                result.push(currentVertex);
+                this.adjacencyList[currentVertex].forEach(neighbor => {
+                    if (!visited[neighbor]) {
+                        visited[neighbor] = true;
+                        stack.push(neighbor);
+                    }
+                })
+            }
+        }
+
+        return result;
+    }
+
+    public BFS(startVertex: any) {
+        const queue = [startVertex];
+        const result = [];
+        const visited = {};
+        let currentVertex;
+        if (this.isVertexExists(startVertex)) {
+            visited[startVertex] = true;
+            while (queue.length) {
+                currentVertex = queue.shift();
+                result.push(currentVertex);
+                this.adjacencyList[currentVertex].forEach(neighbor => {
+                    if (!visited[neighbor]) {
+                        visited[neighbor] = true;
+                        queue.push(neighbor);
+                    }
+                })
+            }
+        }
+        return result;
+    }
+
+    private isVertexExists(vertex: any): boolean {
+        return this.adjacencyList[vertex] !== undefined && this.adjacencyList[vertex] !== null;
+    }
+
+    private isEdgeExists(firstVertex: any, secondVertex: any): boolean {
+        return this.adjacencyList[firstVertex].includes(secondVertex)
+            && this.adjacencyList[secondVertex].includes(firstVertex);
+    }
+}
+
+export {BinaryTree, Graph};

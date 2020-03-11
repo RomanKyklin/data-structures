@@ -300,3 +300,108 @@ var BinaryTree = /** @class */ (function () {
     return BinaryTree;
 }());
 exports.BinaryTree = BinaryTree;
+var Graph = /** @class */ (function () {
+    function Graph() {
+        this.adjacencyList = {};
+    }
+    Graph.prototype.addVertex = function (vertex) {
+        if (!this.adjacencyList[vertex]) {
+            this.adjacencyList[vertex] = [];
+        }
+    };
+    Graph.prototype.getAdjList = function () {
+        return this.adjacencyList;
+    };
+    Graph.prototype.addEdge = function (firstVertex, secondVertex) {
+        if (this.isVertexExists(firstVertex) && this.isVertexExists(secondVertex)
+            && !this.isEdgeExists(firstVertex, secondVertex)) {
+            this.adjacencyList[firstVertex].push(secondVertex);
+            this.adjacencyList[secondVertex].push(firstVertex);
+        }
+    };
+    Graph.prototype.removeEdge = function (firstVertex, secondVertex) {
+        if (this.isVertexExists(firstVertex) && this.isVertexExists(secondVertex)
+            && this.isEdgeExists(firstVertex, secondVertex)) {
+            this.adjacencyList[firstVertex] = this.adjacencyList[firstVertex].filter(function (val) { return val !== secondVertex; });
+            this.adjacencyList[secondVertex] = this.adjacencyList[secondVertex].filter(function (val) { return val !== firstVertex; });
+        }
+    };
+    Graph.prototype.removeVertex = function (vertex) {
+        var _this = this;
+        if (this.isVertexExists(vertex)) {
+            Object.keys(this.adjacencyList).map(function (value, index) {
+                if (value !== vertex && _this.isEdgeExists(vertex, value)) {
+                    _this.removeEdge(vertex, value);
+                }
+            });
+            delete this.adjacencyList[vertex];
+        }
+    };
+    Graph.prototype.DFS = function (startVertex) {
+        var _this = this;
+        var result = [];
+        var visited = {};
+        var dfs = function (vertex) {
+            if (!_this.isVertexExists(vertex))
+                return null;
+            visited[vertex] = true;
+            result.push(vertex);
+            _this.adjacencyList[vertex].forEach(function (neighbor) {
+                if (!visited[neighbor]) {
+                    return dfs(neighbor);
+                }
+            });
+        };
+        dfs(startVertex);
+        return result;
+    };
+    Graph.prototype.DFSIterative = function (startVertex) {
+        var stack = [startVertex];
+        var result = [];
+        var visited = {};
+        var currentVertex;
+        if (this.isVertexExists(startVertex)) {
+            visited[startVertex] = true;
+            while (stack.length) {
+                currentVertex = stack.pop();
+                result.push(currentVertex);
+                this.adjacencyList[currentVertex].forEach(function (neighbor) {
+                    if (!visited[neighbor]) {
+                        visited[neighbor] = true;
+                        stack.push(neighbor);
+                    }
+                });
+            }
+        }
+        return result;
+    };
+    Graph.prototype.BFS = function (startVertex) {
+        var queue = [startVertex];
+        var result = [];
+        var visited = {};
+        var currentVertex;
+        if (this.isVertexExists(startVertex)) {
+            visited[startVertex] = true;
+            while (queue.length) {
+                currentVertex = queue.shift();
+                result.push(currentVertex);
+                this.adjacencyList[currentVertex].forEach(function (neighbor) {
+                    if (!visited[neighbor]) {
+                        visited[neighbor] = true;
+                        queue.push(neighbor);
+                    }
+                });
+            }
+        }
+        return result;
+    };
+    Graph.prototype.isVertexExists = function (vertex) {
+        return this.adjacencyList[vertex] !== undefined && this.adjacencyList[vertex] !== null;
+    };
+    Graph.prototype.isEdgeExists = function (firstVertex, secondVertex) {
+        return this.adjacencyList[firstVertex].includes(secondVertex)
+            && this.adjacencyList[secondVertex].includes(firstVertex);
+    };
+    return Graph;
+}());
+exports.Graph = Graph;

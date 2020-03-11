@@ -1,6 +1,6 @@
 const {selectionSort} = require("../algorithms");
 const expect = require('chai').expect;
-const {BinaryTree} = require('../data-structures.js');
+const {BinaryTree, Graph} = require('../data-structures.js');
 const {quickSort, mergeSort, bubbleSort, heapSort, merge} = require('../algorithms');
 
 describe('#quickSort()', function () {
@@ -191,6 +191,134 @@ describe('#Binary tree traversal algorithms ', function () {
             tree.search(15),
         ];
         expect(tree.dfsPostOrder()).to.eql(expectedArray);
+    });
+});
+
+describe('#Undirected graph ', function () {
+    it('should add vertex to adj list and not override if vertex already exists', function () {
+        const expectedAdjList = {
+            test: ['some test edge'],
+            test2: [],
+        };
+        const graph = new Graph();
+        graph.addVertex('test');
+        graph.addVertex('test2');
+        graph.getAdjList().test = ['some test edge'];
+        graph.addVertex('test');
+        expect(graph.getAdjList()).to.eql(expectedAdjList);
+    });
+
+    it('should add edge if it not already exists', function () {
+        const graph = new Graph();
+        graph.addVertex('test');
+        graph.addVertex('test2');
+        graph.addVertex('test3');
+        graph.addEdge('test', 'test2');
+        graph.addEdge('test3', 'test2');
+        graph.addEdge('test3', 'test');
+        const expectedAdjList = {
+            test: ['test2', 'test3'],
+            test2: ['test', 'test3'],
+            test3: ['test2', 'test']
+        };
+        expect(graph.getAdjList()).to.eql(expectedAdjList);
+
+        graph.addEdge('test', 'test2');
+        expect(graph.getAdjList()).to.eql(expectedAdjList);
+    });
+
+    it('should remove an edge', function () {
+        const graph = new Graph();
+        graph.addVertex('test');
+        graph.addVertex('test2');
+        graph.addVertex('test3');
+        graph.addEdge('test', 'test2');
+        graph.addEdge('test3', 'test2');
+        graph.addEdge('test3', 'test');
+        graph.removeEdge('test', 'test2');
+        let expectedAdjList = {
+            test: ['test3'],
+            test2: ['test3'],
+            test3: ['test2', 'test']
+        };
+        expect(graph.getAdjList()).to.eql(expectedAdjList);
+
+        graph.removeEdge('test3', 'test2');
+
+        expectedAdjList = {
+            test: ['test3'],
+            test2: [],
+            test3: ['test']
+        };
+
+        expect(graph.getAdjList()).to.eql(expectedAdjList);
+    });
+
+    it('should remove vertex', function () {
+        const graph = new Graph();
+        graph.addVertex('test');
+        graph.addVertex('test2');
+        graph.addVertex('test3');
+        graph.addEdge('test2', 'test');
+        graph.addEdge('test3', 'test');
+        graph.removeVertex('test');
+
+        const expectedAdjList = {
+            test2: [],
+            test3: []
+        };
+
+        expect(graph.getAdjList()).to.eql(expectedAdjList);
+    });
+
+    it('should traverse graph with DFS and BFS', function () {
+        const graph = new Graph();
+        graph.addVertex('A');
+        graph.addVertex('B');
+        graph.addVertex('C');
+        graph.addVertex('D');
+        graph.addVertex('E');
+        graph.addVertex('F');
+        graph.addEdge('A', 'B');
+        graph.addEdge('A', 'C');
+        graph.addEdge('B', 'D');
+        graph.addEdge('C', 'E');
+        graph.addEdge('D', 'E');
+        graph.addEdge('D', 'F');
+        graph.addEdge('E', 'F');
+
+        let expectedArray = [
+            'A',
+            'B',
+            'D',
+            'E',
+            'C',
+            'F',
+        ];
+
+        expect(graph.DFS('A')).to.eql(expectedArray);
+
+        expectedArray = [
+            'A',
+            'C',
+            'E',
+            'F',
+            'D',
+            'B'
+        ];
+
+        expect(graph.DFSIterative('A')).to.eql(expectedArray);
+
+        expectedArray = [
+            'A',
+            'B',
+            'C',
+            'D',
+            'E',
+            'F'
+        ];
+
+        expect(graph.BFS('A')).to.eql(expectedArray);
     });
 });
 
