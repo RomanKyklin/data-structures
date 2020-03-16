@@ -1,7 +1,7 @@
 const {selectionSort} = require("../algorithms");
 const expect = require('chai').expect;
 const {BinaryTree, Graph} = require('../data-structures.js');
-const {quickSort, mergeSort, bubbleSort, heapSort, merge} = require('../algorithms');
+const {quickSort, mergeSort, bubbleSort, heapSort, merge, numberOfIslands} = require('../algorithms');
 
 describe('#quickSort()', function () {
     it('should return sorted array with quickSort', function () {
@@ -319,6 +319,40 @@ describe('#Undirected graph ', function () {
         ];
 
         expect(graph.BFS('A')).to.eql(expectedArray);
+    });
+});
+
+describe('#numberOfIslands()', function () {
+    it('should should return islands count', function () {
+        let matrix = [
+            [1, 1, 1, 0, 0],
+            [1, 0, 1, 0, 0],
+            [0, 0, 0, 0, 0],
+            [1, 0, 1, 0, 0],
+            [0, 0, 0, 0, 0]
+        ];
+
+        expect(numberOfIslands(matrix)).to.eql(3);
+
+        matrix = [
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]
+        ];
+
+        expect(numberOfIslands(matrix)).to.eql(0);
+
+        matrix = [
+            [1, 1, 1, 0, 1],
+            [1, 1, 0, 0, 1],
+            [0, 0, 0, 0, 0],
+            [1, 0, 1, 1, 0],
+            [0, 0, 1, 0, 0]
+        ];
+
+        expect(numberOfIslands(matrix)).to.eql(4);
     });
 });
 

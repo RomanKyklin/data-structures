@@ -74,19 +74,35 @@ const isBracketsPlacedCorrectly = (str) => {
     return str.length === 0;
 };
 
-/**
- * Checks the left diagonal
- * @param matrixArr
- * @returns {boolean}
- */
-const isMatrixPalindrome = matrixArr => {
-    let firstElement = matrixArr[0][0];
-    for (let i = 0; i < matrixArr.length; i++) {
-        if (!(firstElement === matrixArr[i][i])) {
-            return false;
+const numberOfIslands = (matrix) => {
+    if (matrix === null || matrix.length === 0) {
+        return 0
+    }
+
+    let numOfIslands = 0;
+
+    for (let i = 0; i < matrix.length; i++) {
+        for (let j = 0; j < matrix[i].length; j++) {
+            if (matrix[i][j] === 1) {
+                numOfIslands += dfs(matrix, i, j);
+            }
         }
     }
-    return true;
+
+    return numOfIslands;
+};
+
+const dfs = (matrix, i, j) => {
+    if (i < 0 || i >= matrix.length || j < 0 || j >= matrix[i].length || matrix[i][j] === 0) {
+        return 0;
+    }
+
+    matrix[i][j] = 0;
+    dfs(matrix, i + 1, j);
+    dfs(matrix, i - 1, j);
+    dfs(matrix, i, j + 1);
+    dfs(matrix, i, j - 1);
+    return 1;
 };
 
 const quickSort = (items) => {
@@ -227,5 +243,5 @@ const heapify = (arr, length, i) => {
 };
 
 
-module.exports = {quickSort, mergeSort, bubbleSort, heapSort, merge, selectionSort};
+module.exports = {quickSort, mergeSort, bubbleSort, heapSort, merge, selectionSort, numberOfIslands};
 
